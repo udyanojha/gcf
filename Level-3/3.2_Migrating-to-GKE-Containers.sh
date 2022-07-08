@@ -30,9 +30,9 @@ gcloud config list project
 export PROJECT_ID=$(gcloud info --format='value(config.project)')
 export BUCKET_NAME=$(gcloud info --format='value(config.project)')
 export EMAIL=$(gcloud config get-value core/account)
-#gcloud config set compute/region us-central1
-#gcloud config set compute/zone us-central1-a
-export ZONE=us-central1-a
+#gcloud config set compute/region us-east1
+#gcloud config set compute/zone us-east1-b
+export ZONE=us-east1-b
 
 
 
@@ -45,8 +45,8 @@ ab -V
 
 git clone https://github.com/GoogleCloudPlatform/gke-migration-to-containers.git
 cd gke-migration-to-containers
-gcloud config set compute/region us-central1
-gcloud config set compute/zone us-central1-a
+gcloud config set compute/region us-east1
+gcloud config set compute/zone us-east1-b
 sed -i "s/f1-micro/n1-standard-1/g" terraform/variables.tf
 make create
 echo "${GREEN}${BOLD}
@@ -116,7 +116,7 @@ exit
 '
 echo "${RESET}"
 
-gcloud compute ssh cos-vm --zone us-central1-a --quiet
+gcloud compute ssh cos-vm --zone us-east1-b --quiet
 
 gcloud container clusters get-credentials prime-server-cluster
 kubectl get pods
