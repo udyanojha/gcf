@@ -30,10 +30,9 @@ gcloud config list project
 export PROJECT_ID=$(gcloud info --format='value(config.project)')
 export BUCKET_NAME=$(gcloud info --format='value(config.project)')
 export EMAIL=$(gcloud config get-value core/account)
-gcloud config set compute/region us-central1
-gcloud config set compute/zone us-central1-a
-export ZONE=us-central1-a
-
+gcloud config set compute/region europe-west1
+gcloud config set compute/zone europe-west1-c
+export ZONE=europe-west1-c
 
 
 USER_EMAIL=$(gcloud auth list --limit=1 2>/dev/null | grep '@' | awk '{print $2}')
@@ -53,9 +52,9 @@ ${RESET}"
 
 gcloud compute networks subnets list --network default
 SUBNET_NAME=$(gcloud compute networks subnets list --network default --format='value(NAME)' | grep 'gke')
-gcloud compute networks subnets describe $SUBNET_NAME --region us-central1
+gcloud compute networks subnets describe $SUBNET_NAME --region europe-west1
 
-gcloud compute instances create source-instance --zone us-central1-a --scopes 'https://www.googleapis.com/auth/cloud-platform'
+gcloud compute instances create source-instance --zone europe-west1-c --scopes 'https://www.googleapis.com/auth/cloud-platform'
 
 echo "${GREEN}${BOLD}
 
@@ -63,7 +62,7 @@ Task 2 Completed
 
 ${RESET}"
 
-nat_IP=$(gcloud compute instances describe source-instance --zone us-central1-a | grep natIP | awk '{print $2}')
+nat_IP=$(gcloud compute instances describe source-instance --zone europe-west1-c | grep natIP | awk '{print $2}')
 echo $nat_IP
 gcloud container clusters update private-cluster \
     --enable-master-authorized-networks \
@@ -76,7 +75,7 @@ ${RESET}"
 
 cat > source_instance_ssh.sh << EOF
 sudo apt-get install kubectl
-gcloud container clusters get-credentials private-cluster --zone us-central1-a
+gcloud container clusters get-credentials private-cluster --zone europe-west1-c
 kubectl get nodes --output yaml | grep -A4 addresses
 kubectl get nodes --output wide
 exit
@@ -99,9 +98,9 @@ Run this in ssh:
 ./source_instance_ssh.sh
 
 ${RESET}"
-gcloud compute ssh source-instance --zone us-central1-a --quiet
+gcloud compute ssh source-instance --zone europe-west1-c --quiet
 
-gcloud container clusters delete private-cluster --zone us-central1-a
+gcloud container clusters delete private-cluster --zone europe-west1-c
 echo "${GREEN}${BOLD}
 
 Task 4 Completed
@@ -111,7 +110,7 @@ gcloud compute networks subnets create my-subnet \
     --network default \
     --range 10.0.4.0/22 \
     --enable-private-ip-google-access \
-    --region us-central1 \
+    --region europe-west1 \
     --secondary-range my-svc-range=10.0.32.0/20,my-pod-range=10.4.0.0/14
 echo "${GREEN}${BOLD}
 
