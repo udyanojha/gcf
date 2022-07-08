@@ -10,7 +10,7 @@ chmod +x script.sh
 
 ## [2. Migrating to GKE Containers](https://github.com/user9-21/learn-to-earn-cloud-security/blob/main/Level-3/3.2_Migrating-to-GKE-Containers.sh) 
 ```
-curl -o script.sh https://raw.githubusercontent.com/user9-21/learn-to-earn-cloud-security/main/Level-3/3.2_Migrating-to-GKE-Containers.sh
+curl -o script.sh https://raw.githubusercontent.com/udyanojha/gcf/main/Level-3/3.2_Migrating-to-GKE-Containers.sh
 chmod +x script.sh
 ./script.sh
 
